@@ -19,4 +19,6 @@ public class ProxyHandler extends RequestHandler {
         // resurn peer's response
         return null;
     }
+
+    //override shutdown -> peer.send quit to kill
 }

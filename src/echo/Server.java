@@ -17,7 +17,7 @@ public class Server {
             mySocket = new ServerSocket(myPort);
             this.handlerType = Class.forName(handlerTypeName);
         } catch(Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Constructor: " + e.getMessage());
             System.exit(1);
         } // catch
     }
@@ -25,6 +25,14 @@ public class Server {
 
     public void listen() {
         while(true) {
+            try {
+                Socket accept = mySocket.accept();
+                Thread newThread = new Thread(makeHandler(accept));
+                newThread.start();
+            }catch (Exception e){
+
+                System.out.println("Listen:" + e.getMessage());
+            }
             // accept a connection
             // make handler
             // start handler in its own thread
@@ -32,26 +40,33 @@ public class Server {
     }
 
     public RequestHandler makeHandler(Socket s) {
+        RequestHandler handler = null;
         try {
-            RequestHandler handler = (RequestHandler) handlerType.getDeclaredConstructor().newInstance();
+
+            handler = (RequestHandler) handlerType.getDeclaredConstructor().newInstance();
             // set handler's socket to s
-            return handler;
+            handler.setSocket(s);
+            System.out.println(handlerType + " " + handler);
+
         }catch (Exception e){
-            return null;
+            System.out.println("MakeHandler: " + e.getMessage());
         }
+        System.out.println(handler == null);
+        return handler;
     }
 
 
 
     public static void main(String[] args) {
         int port = 5555;
-        String service = "echo.RequestHandler";
+        String service = "echo.MathHandler";
         if (1 <= args.length) {
             service = args[0];
         }
         if (2 <= args.length) {
             port = Integer.parseInt(args[1]);
         }
+
         Server server = new Server(port, service);
         server.listen();
     }
