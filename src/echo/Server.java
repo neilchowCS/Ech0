@@ -51,7 +51,6 @@ public class Server {
         }catch (Exception e){
             System.out.println("MakeHandler: " + e.getMessage());
         }
-        System.out.println(handler == null);
         return handler;
     }
 

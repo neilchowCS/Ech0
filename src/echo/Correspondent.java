@@ -62,7 +62,7 @@ public class Correspondent {
         try {
             msg = sockIn.readLine();
         } catch(Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Recieve error: " + e.getMessage());
             System.exit(1);
         }
         return msg;

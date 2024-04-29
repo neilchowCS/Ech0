@@ -19,6 +19,7 @@ public class RequestHandler extends Correspondent implements Runnable {
     // any housekeeping can be done by an override of this:
     protected void shutDown() {
         if (Server.DEBUG) System.out.println("handler shutting down");
+        active = false;
     }
 
     public void run() {
